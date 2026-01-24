@@ -2,9 +2,17 @@
 # Wrapper script to run Google Ads MCP server
 # Bypasses devbox/nix to avoid GLIBC conflicts
 
-# Clean environment - remove nix paths
+# Clean ALL nix/devbox environment variables
 unset LD_LIBRARY_PATH
-export PATH="/usr/local/bin:/usr/bin:/bin:$HOME/.local/bin"
+unset PYTHONPATH
+unset PYTHONHOME
+unset VIRTUAL_ENV
+unset NIX_PATH
+unset NIX_PROFILES
+unset NIX_SSL_CERT_FILE
+
+# Set clean PATH - remove any nix store paths
+export PATH=$(echo "/usr/local/bin:/usr/bin:/bin:$HOME/.local/bin" | tr ':' '\n' | grep -v '/nix/store' | tr '\n' ':' | sed 's/:$//')
 
 cd "$(dirname "$0")"
 
